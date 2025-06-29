@@ -1,0 +1,62 @@
+# Dependency directories
+/node_modules
+/.pnp
+.pnp.*
+/yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+pids/
+*.pid
+*.seed
+
+# Runtime data
+*.pid
+*.lock
+*.sock
+*.pid.lock
+
+# Build/compiled files
+/dist
+/out
+/build
+/coverage
+*.exe
+*.dll
+
+# IDE/Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*.code-workspace
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+
+# Misc
+*.pem
+*.cer
+*.key
+.cache/
+.temp/
+
+# # Database files (if applicable)
+# *.db
+# *.sqlite
+# *.sqlite3
+
+# # Uploads/media (if any)
+# /uploads
+# /media
