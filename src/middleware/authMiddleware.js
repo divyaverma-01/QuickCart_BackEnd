@@ -5,10 +5,11 @@ import User from "../models/user";
 
 export const authMiddleware = async (req, res, next) => {
   //Check for token in headers
-  const token = req.headers.authorization?.split(" ")[1];
+  const token =
+    req.cookies?.authToken || req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ message: "No token provided" });
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
   }
 
   try {
@@ -20,7 +21,7 @@ export const authMiddleware = async (req, res, next) => {
     //console.log(decoded);
     const user = await User.findById(decoded.userId);
     if (!user) {
-      return res.status(401).json({ message: "Invalid Token" });
+      return res.status(401).json({ message: "Invalid Token: User not found" });
     }
 
     req.user = user;

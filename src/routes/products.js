@@ -20,7 +20,7 @@ router.get("/:id", getProductById);
 router.get("/:id/variants", getProductVariants);
 
 //protected route
-router.use(authMiddleware, isAdmin);
+router.use(authMiddleware, isAdmin); //middleware
 router.post("/", createProduct);
 router.put("/:id", updateProduct);
 router.delete("/:id", deleteProduct);

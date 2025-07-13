@@ -12,6 +12,8 @@ export const createProduct = async (req, res) => {
 };
 
 // Get All Products
+//add pagination
+//http://localhost:3001/api/products/
 export const getAllProducts = async (req, res) => {
   try {
     const { category, active } = req.query;
@@ -28,6 +30,7 @@ export const getAllProducts = async (req, res) => {
 };
 
 // Get Single Product
+//http://localhost:3001/api/products/1
 export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -41,6 +44,7 @@ export const getProductById = async (req, res) => {
 };
 
 // Update Product
+//http://localhost:3001/api/products/1
 export const updateProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
@@ -57,6 +61,7 @@ export const updateProduct = async (req, res) => {
 };
 
 // Delete Product
+//http://localhost:3001/api/products/1
 export const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
@@ -70,6 +75,7 @@ export const deleteProduct = async (req, res) => {
 };
 
 // Get Product Variants
+//http://localhost:3001/api/products/1/variants
 export const getProductVariants = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);

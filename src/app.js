@@ -3,8 +3,11 @@ import authRoutes from "./routes/auth.js";
 import productRoutes from "./routes/products";
 import orderRoutes from "./routes/order";
 import profileRoutes from "./routes/profile"; //profile
+import transactionRoutes from "./routes/transactions";
 import dashboardRoutes from "./routes/dashboard.js";
 import cors from "cors"; // profile image ke liye
+import cookieParser from "cookie-parser";
+import { authMiddleware } from "./middleware/authMiddleware.js";
 
 import { databaseConnection } from "./config/db";
 import { configDotenv } from "dotenv";
@@ -23,6 +26,7 @@ app.use(
 );
 // app.use(cors());
 app.use(express.json()); // Increased for image uploads
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   console.log(req.method, req.url);
@@ -34,6 +38,7 @@ app.use("/api/auth", authRoutes); //routes??
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/transactions", transactionRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 //Home route
@@ -43,6 +48,10 @@ app.get("/", (req, res) => {
   } catch (error) {
     res.send({ ok: false, error: error?.message });
   }
+});
+
+app.get("/me", authMiddleware, (req, res) => {
+  res.json({ user: req.user }); // Set by authMiddleware via cookie token
 });
 
 // Error handling middleware (always last)

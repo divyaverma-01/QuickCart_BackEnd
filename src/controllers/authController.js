@@ -1,16 +1,16 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { configDotenv } from "dotenv";
-import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/jwt.js";
+import { JWT_SECRET_KEY, JWT_EXPIRES_IN } from "../config/jwt.js";
 import User from "../models/user.js"; // importing user model
 
 configDotenv();
 
-console.log(JWT_SECRET, "yes"); //just used as a check
+console.log(JWT_SECRET_KEY, "yes"); //just used as a check
 //const users = []; --> Simulate DB: The users array works for testing, but you’ll replace it with a real database (MongoDB/PostgreSQL) soon.
 
-//Register
-export const register = async (req, res) => {
+//SignUp
+export const signup = async (req, res) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
 
@@ -43,6 +43,7 @@ export const register = async (req, res) => {
 };
 
 //Login
+//Validates user, generates JWT, and returns it in the JSON response (not as a cookie).
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -56,11 +57,11 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
     //const user = users.find((u) => u.username === username); ---> used for Temporary testing or mock data like users array
 
-    if (!user) return res.status(401).json({ error: "Invalid credentials" });
+    if (!user) return res.status(401).json({ error: "Invalid credentials" }); //user doesnt exist
 
     //verify password
     const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.status(401).json({ error: "Invalid credentials" });
+    if (!valid) return res.status(401).json({ error: "Invalid credentials" }); //password is incorrect
 
     //Generate JWT
     const token = jwt.sign(
@@ -69,16 +70,24 @@ export const login = async (req, res) => {
         email: user.email,
         role: user.role,
       },
-      JWT_SECRET,
+      JWT_SECRET_KEY,
       { expiresIn: JWT_EXPIRES_IN }
     );
 
-    //response with token
+    //Set cookie
+    //After validating the user and generating the JWT:
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      path: "/", //(cookie is valid for the whole site)
+    });
     res.json({
-      token,
-      expiresIn: JWT_EXPIRES_IN,
+      message: "Login successful",
       user: {
-        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
         role: user.role,
       },
     });
@@ -88,4 +97,10 @@ export const login = async (req, res) => {
       error: error.message || "Login failed",
     });
   }
+};
+
+//Logout
+export const logout = (req, res) => {
+  res.clearCookie("authToken", { path: "/" });
+  res.json({ message: "Logged out" });
 };

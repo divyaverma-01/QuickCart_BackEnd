@@ -18,6 +18,13 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           default: 1,
         },
+        selectedVariants: [
+          {
+            name: String,
+            value: String,
+            priceModifier: Number,
+          },
+        ],
       },
     ],
 
@@ -35,7 +42,15 @@ const orderSchema = new mongoose.Schema(
     shippingAddress: {
       street: String,
       city: String,
+      state: String,
       country: String,
+      pincode: String,
+    },
+
+    paymentInfo: {
+      method: String, // e.g., "COD", "Stripe"
+      paymentId: String,
+      paidAt: Date,
     },
   },
   { timestamps: true }

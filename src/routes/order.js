@@ -1,9 +1,10 @@
 import express from "express";
 
-import { authMiddleware } from "../middleware/authMiddleware";
+import { authMiddleware, isAdmin } from "../middleware/authMiddleware";
 import {
   createOrder,
   getUserOrders,
+  getAllOrders,
   getOrderById,
   updateOrderStatus,
   deleteOrder,
@@ -11,12 +12,14 @@ import {
 
 const router = express.Router();
 
+// Customer Routes
 router.post("/", authMiddleware, createOrder); // create new order
-router.get("/:id", authMiddleware, getOrderById); // get user order by Id
 router.get("/my-orders", authMiddleware, getUserOrders); //get all user orders
-// router.put("/:id/status", updateOrderStatus);
-// router.delete("/:id", deleteOrder);
-// // Only for admin
-// router.get("/", isAuthenticated, isAdmin, getAllOrders);
+router.get("/:id", authMiddleware, getOrderById); // get user order by Id
+
+// Admin Routes
+router.get("/", authMiddleware, isAdmin, getAllOrders);
+router.put("/:id/status", authMiddleware, isAdmin, updateOrderStatus);
+router.delete("/:id", authMiddleware, isAdmin, deleteOrder);
 
 export default router;

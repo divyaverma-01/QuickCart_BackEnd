@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
     lastName: { type: String, required: true }, // Enforces unique usernames
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // Store hashed password (use bcrypt)
-    role: { type: String, default: "user" }, // For role-based auth
+    role: { type: String, enum: ["user", "admin"], default: "user" }, // For role-based auth
     profileImage: { type: String, default: "" },
   },
   { timestamps: true }
