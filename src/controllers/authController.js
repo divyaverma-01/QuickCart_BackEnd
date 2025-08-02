@@ -74,17 +74,9 @@ export const login = async (req, res) => {
       { expiresIn: JWT_EXPIRES_IN }
     );
 
-    //Set cookie
-    //After validating the user and generating the JWT:
-    res.cookie("authToken", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-      path: "/", //(cookie is valid for the whole site)
-    });
     res.json({
       message: "Login successful",
+      token,
       user: {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -101,6 +93,5 @@ export const login = async (req, res) => {
 
 //Logout
 export const logout = (req, res) => {
-  res.clearCookie("authToken", { path: "/" });
   res.json({ message: "Logged out" });
 };

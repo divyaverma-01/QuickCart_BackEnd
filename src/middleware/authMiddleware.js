@@ -5,8 +5,7 @@ import User from "../models/user";
 
 export const authMiddleware = async (req, res, next) => {
   //Check for token in headers
-  const token =
-    req.cookies?.authToken || req.headers.authorization?.split(" ")[1];
+  const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized: No token provided" });
@@ -34,7 +33,7 @@ export const authMiddleware = async (req, res, next) => {
 
 export const isAdmin = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
-    next(); // User is admin — proceed to next middleware/route handler
+    return next(); // User is admin — proceed to next middleware/route handler
   } else {
     res.status(403).json({ message: "Admin access required" }); // Forbidden access
   }

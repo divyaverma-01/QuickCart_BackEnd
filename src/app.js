@@ -5,10 +5,13 @@ import orderRoutes from "./routes/order";
 import profileRoutes from "./routes/profile"; //profile
 import transactionRoutes from "./routes/transactions";
 import dashboardRoutes from "./routes/dashboard.js";
-import cors from "cors"; // profile image ke liye
-import cookieParser from "cookie-parser";
-import { authMiddleware } from "./middleware/authMiddleware.js";
+import uploadProductImageRoute from "./routes/uploadProductImage";
+import uploadProfileImageRoute from "./routes/uploadProfileImage";
+import eventRoutes from "./routes/events";
+import razorpayRoutes from "./routes/razorpay";
 
+import cors from "cors"; // profile image ke liye
+import { authMiddleware } from "./middleware/authMiddleware.js";
 import { databaseConnection } from "./config/db";
 import { configDotenv } from "dotenv";
 
@@ -22,11 +25,11 @@ app.use(
     origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 // app.use(cors());
 app.use(express.json()); // Increased for image uploads
-app.use(cookieParser());
 
 app.use((req, res, next) => {
   console.log(req.method, req.url);
@@ -40,6 +43,10 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/upload/product-image", uploadProductImageRoute);
+app.use("/api/upload/profile-image", uploadProfileImageRoute);
+app.use("/api/events", eventRoutes);
+app.use("/api/razorpay", razorpayRoutes);
 
 //Home route
 app.get("/", (req, res) => {

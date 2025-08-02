@@ -11,16 +11,15 @@ const variantSchema = new mongoose.Schema({
   ],
 });
 
-//merchant id add
 //prepaid or cod
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     merchant: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
-        },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     basePrice: { type: Number, required: true }, // Renamed from 'price' to be clearer
     category: { type: String },
     description: { type: String },
